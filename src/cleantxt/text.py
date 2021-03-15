@@ -38,23 +38,28 @@ def remove_white_spaces(line):
     return " ".join(line.split())
 
 
-def remove_accents(raw_text):
+def remove_accents(line):
     """Removes common accent characters.
 
     """
 
-    raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
-    raw_text = re.sub(u"[èéêë]", 'e', raw_text)
-    raw_text = re.sub(u"[ìíîï]", 'i', raw_text)
-    raw_text = re.sub(u"[òóôõö]", 'o', raw_text)
-    raw_text = re.sub(u"[ùúûü]", 'u', raw_text)
-    raw_text = re.sub(u"[ýÿ]", 'y', raw_text)
-    raw_text = re.sub(u"[ß]", 'ss', raw_text)
-    raw_text = re.sub(u"[ñ]", 'n', raw_text)
-    return raw_text
+    line = re.sub(u"[àáâãäå]", 'a', line)
+    line = re.sub(u"[èéêë]", 'e', line)
+    line = re.sub(u"[ìíîï]", 'i', line)
+    line = re.sub(u"[òóôõö]", 'o', line)
+    line = re.sub(u"[ùúûü]", 'u', line)
+    line = re.sub(u"[ýÿ]", 'y', line)
+    line = re.sub(u"[ß]", 'ss', line)
+    line = re.sub(u"[ñ]", 'n', line)
+    line = re.sub(u"[ç]", 'c', line)
+    return line
 
 
-def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True, accent=True, others=None):
+def remove_non_alphanum(text):
+    return " ".join(re.compile(r'\W+', re.UNICODE).split(text))
+
+
+def clean_text(text, witespace=True, punctuation=True, duplicated=True, alphnum=True, accent=True, others=[('ə', 'a')]):
 
     arabic_punctuations = '''`÷×؛<>_()*&^%][ـ،/:"؟.,'{}~¦+|!”…“–ـ'''
     english_punctuations = string.punctuation
@@ -99,11 +104,11 @@ def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True
     if accent:
         text = remove_accents(text)
 
-    if alt:
-        text = text.replace('@', '')
+    if alphnum:
+        text = remove_non_alphanum(text)
 
     if others is not None:
-        other = re.compile(others, re.VERBOSE)
-        text = re.sub(other, '', text)
+        for rule in others:
+            text = text.replace(rule[0], rule[1])
 
     return text

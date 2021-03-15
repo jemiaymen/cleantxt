@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cleantxt",
-    version="0.0.3",
+    version="0.0.4",
     author="Aymen Jemi",
     author_email="jemiaymen@gmail.com",
     description="cleaning text from noise for nlp tasks",
