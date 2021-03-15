@@ -34,7 +34,11 @@ def remove_duplicated_letter(line):
     return ' '.join(result)
 
 
-def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True):
+def remove_white_spaces(line):
+    return " ".join(line.split())
+
+
+def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True, others=None):
 
     arabic_punctuations = '''`÷×؛<>_()*&^%][ـ،/:"؟.,'{}~¦+|!”…“–ـ'''
     english_punctuations = string.punctuation
@@ -72,11 +76,15 @@ def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True
         text = re.sub(arabic_diacritics, '', text)
 
     if witespace:
-        text = " ".join(text.split())
+        text = remove_white_spaces(text)
     if duplicated:
         text = remove_duplicated_letter(text)
 
     if alt:
         text = text.replace('@', '')
+
+    if others is not None:
+        other = re.compile(others, re.VERBOSE)
+        text = re.sub(other, '', text)
 
     return text
