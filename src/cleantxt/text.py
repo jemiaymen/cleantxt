@@ -38,7 +38,23 @@ def remove_white_spaces(line):
     return " ".join(line.split())
 
 
-def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True, others=None):
+def remove_accents(raw_text):
+    """Removes common accent characters.
+
+    """
+
+    raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
+    raw_text = re.sub(u"[èéêë]", 'e', raw_text)
+    raw_text = re.sub(u"[ìíîï]", 'i', raw_text)
+    raw_text = re.sub(u"[òóôõö]", 'o', raw_text)
+    raw_text = re.sub(u"[ùúûü]", 'u', raw_text)
+    raw_text = re.sub(u"[ýÿ]", 'y', raw_text)
+    raw_text = re.sub(u"[ß]", 'ss', raw_text)
+    raw_text = re.sub(u"[ñ]", 'n', raw_text)
+    return raw_text
+
+
+def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True, accent=True, others=None):
 
     arabic_punctuations = '''`÷×؛<>_()*&^%][ـ،/:"؟.,'{}~¦+|!”…“–ـ'''
     english_punctuations = string.punctuation
@@ -79,6 +95,9 @@ def clean_text(text, witespace=True, punctuation=True, duplicated=True, alt=True
         text = remove_white_spaces(text)
     if duplicated:
         text = remove_duplicated_letter(text)
+
+    if accent:
+        text = remove_accents(text)
 
     if alt:
         text = text.replace('@', '')
