@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cleantxt",
-    version="0.0.4",
+    version="0.0.5",
     author="Aymen Jemi",
     author_email="jemiaymen@gmail.com",
     description="cleaning text from noise for nlp tasks",
@@ -22,5 +22,15 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src", exclude=("tests",)),
+    install_requires=[
+        "tqdm"
+    ],
+
+
+    entry_points={
+        "console_scripts": [
+            "cleantxt=cleantxt.__main__:main",
+        ]
+    },
     python_requires=">=3.6",
 )

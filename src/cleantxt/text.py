@@ -59,11 +59,23 @@ def remove_non_alphanum(text):
     return " ".join(re.compile(r'\W+', re.UNICODE).split(text))
 
 
-def clean_text(text, witespace=True, punctuation=True, duplicated=True, alphnum=True, accent=True, others=[('ə', 'a')]):
+def clean_text(
+    text,
+    whitespace=True,
+    punctuation=True,
+    duplicated=True,
+    alphnum=True,
+    accent=True,
+    do_lower=True,
+    others=[('ə', 'a')]
+):
 
     arabic_punctuations = '''`÷×؛<>_()*&^%][ـ،/:"؟.,'{}~¦+|!”…“–ـ'''
     english_punctuations = string.punctuation
     arabic = False
+
+    if do_lower:
+        text = text.lower()
 
     for x in text.split(' '):
         if is_arabic(x):
@@ -96,8 +108,9 @@ def clean_text(text, witespace=True, punctuation=True, duplicated=True, alphnum=
 
         text = re.sub(arabic_diacritics, '', text)
 
-    if witespace:
+    if whitespace:
         text = remove_white_spaces(text)
+
     if duplicated:
         text = remove_duplicated_letter(text)
 
