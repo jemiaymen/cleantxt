@@ -125,3 +125,38 @@ def clean_text(
             text = text.replace(rule[0], rule[1])
 
     return text
+
+
+def wc(path, unique=False, both=False):
+
+    file = open(path, mode='r', encoding='utf8')
+    data = file.readlines()
+    file.close()
+    count = 0
+
+    if both:
+        clean_data = []
+        for x in data:
+            x = clean_text(x)
+            clean_data.append(x)
+            count += len(x.split())
+
+        data = set(clean_data)
+        data = [str(x) for x in data]
+        return count, len(data)
+
+    if unique:
+        clean_data = []
+        for x in data:
+            x = clean_text(x)
+            clean_data.append(x)
+
+        data = set(clean_data)
+        data = [str(x) for x in data]
+        return len(data)
+
+    for x in data:
+        x = clean_text(x)
+        count += len(x.split())
+
+    return count

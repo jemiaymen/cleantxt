@@ -136,6 +136,7 @@ def main():
 
     file = open(args.doc, mode='r', encoding='utf8')
     data = file.readlines()
+    file.close()
 
     if args.t:
         data_process = data[args.f:args.t]
@@ -153,7 +154,7 @@ def main():
             out_file.write(
                 text.clean_text(
                     x,
-                    witespace=args.white_space,
+                    whitespace=args.white_space,
                     punctuation=args.punctuation,
                     duplicated=args.duplicated_chars,
                     alphnum=args.alpha_num,
