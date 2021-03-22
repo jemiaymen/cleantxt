@@ -25,7 +25,7 @@ def remove_duplicated_letter(line):
         try:
             count = Counter(w).most_common()[0][1]
             if count > 2:
-                result.append(re.sub(r'(\w)\1+', r'\1', w))
+                result.append(re.sub(r'(\w)\1+', r'\1\1', w))
             else:
                 result.append(w)
         except:
@@ -160,3 +160,17 @@ def wc(path, unique=False, both=False):
         count += len(x.split())
 
     return count
+
+
+def word_frequency(path, top=100):
+    file = open(path, mode='r', encoding='utf8')
+    data = file.readlines()
+    file.close()
+
+    r = []
+    for x in data:
+        for y in x.split(' '):
+            r.append(y)
+
+    c = Counter(r)
+    return c.most_common()[:top]
