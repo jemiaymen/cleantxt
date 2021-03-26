@@ -1,6 +1,8 @@
 import re
 import string
 from collections import Counter
+import os
+import unicodedata
 
 
 def is_arabic(word):
@@ -67,6 +69,7 @@ def clean_text(
     alphnum=True,
     accent=True,
     do_lower=True,
+    ascii=False,
     others=[('ə', 'a')]
 ):
 
@@ -119,6 +122,9 @@ def clean_text(
 
     if alphnum:
         text = remove_non_alphanum(text)
+
+    if ascii:
+        text = unicode_to_ascii(text)
 
     if others is not None:
         for rule in others:
@@ -174,3 +180,31 @@ def word_frequency(path, top=100):
 
     c = Counter(r)
     return c.most_common()[:top]
+
+
+def unique_chars(path_or_list):
+    data = []
+    if isinstance(path_or_list, list):
+        data = path_or_list
+    elif os.path.isfile(path_or_list):
+        file = open(path_or_list, mode='r', encoding='utf8')
+        data = file.readlines()
+        file.close()
+    else:
+        raise Exception('is not path or list please check your path_or_list')
+
+    chars = set()
+    for lines in data:
+        for words in lines.split(' '):
+            for char in words:
+                if char not in chars:
+                    chars.add(char)
+    chars = sorted(chars)
+    return chars
+
+
+def unicode_to_ascii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+    )
